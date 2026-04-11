@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telar y Raíz | Ponchos Artesanales</title>
+    <!-- Tailwind CSS para el diseño -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts para una tipografía más artesanal -->
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Lora', 'serif'],
+                        sans: ['Nunito', 'sans-serif'],
+                    },
+                    colors: {
+                        tierra: {
+                            100: '#F5EBE6',
+                            300: '#D4B8A3',
+                            500: '#A67C52',
+                            700: '#734A26',
+                            900: '#402411',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { background-color: #FAFAFA; }
+    </style>
+</head>
+<body class="font-sans text-stone-800">
+
+    <!-- Navegación -->
+    <nav class="bg-white/90 backdrop-blur shadow-sm fixed w-full z-50 top-0">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#" class="font-serif text-2xl font-bold text-tierra-700">Telar y Raíz</a>
+            <div class="space-x-6 hidden md:block">
+                <a href="#disponibles" class="text-stone-600 hover:text-tierra-500 font-semibold transition">Disponibles</a>
+                <a href="#encargos" class="text-stone-600 hover:text-tierra-500 font-semibold transition">Encargos</a>
+            </div>
+            <!-- Botón móvil (simplificado) -->
+            <a href="#disponibles" class="md:hidden bg-tierra-500 text-white px-4 py-2 rounded-full text-sm">Ver Catálogo</a>
+        </div>
+    </nav>
+
+    <!-- Sección Hero (Portada) -->
+    <header class="relative pt-32 pb-20 md:pt-40 md:pb-28 bg-tierra-100 flex items-center justify-center text-center px-4">
+        <div class="max-w-3xl">
+            <h1 class="font-serif text-4xl md:text-6xl font-bold text-tierra-900 mb-4">Abrigo con historia, tejido a mano.</h1>
+            <p class="text-lg md:text-xl text-stone-600 mb-8 font-light">Ponchos 100% artesanales. Cada pieza es única, tejida en telar tradicional con fibras naturales seleccionadas.</p>
+            <a href="#disponibles" class="inline-block bg-tierra-700 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-tierra-900 transition shadow-lg">
+                Ver piezas disponibles
+            </a>
+        </div>
+    </header>
+
+    <!-- Sección de Productos Disponibles -->
+    <section id="disponibles" class="max-w-6xl mx-auto py-20 px-4">
+        <div class="text-center mb-12">
+            <h2 class="font-serif text-3xl md:text-4xl font-bold text-stone-800">Disponibles Ahora</h2>
+            <p class="text-stone-500 mt-2">Piezas terminadas, listas para enviar.</p>
+        </div>
+
+        <!-- Grilla de productos generada por JavaScript -->
+        <div id="grid-productos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Los productos se inyectan aquí -->
+        </div>
+    </section>
+
+    <!-- Sección de Encargos Personalizados -->
+    <section id="encargos" class="bg-stone-800 text-stone-50 py-20 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="font-serif text-3xl md:text-4xl font-bold mb-6 text-tierra-300">¿Buscás algo único? Hacemos pedidos por encargo</h2>
+            <p class="text-lg md:text-xl text-stone-300 mb-10 max-w-2xl mx-auto font-light">
+                Si te gusta un modelo pero lo querés en otros colores, o si tenés un diseño en mente, podemos tejerlo especialmente para vos. Contactanos para elegir el hilado, los colores y las medidas.
+            </p>
+            
+            <button onclick="enviarWhatsApp('encargo')" class="inline-flex items-center gap-3 bg-white text-stone-900 px-8 py-4 rounded-full text-lg font-bold hover:bg-stone-200 transition shadow-xl">
+                <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Consultar por WhatsApp
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-stone-400 py-8 text-center text-sm">
+        <p>&copy; 2026 Telar y Raíz. Todos los derechos reservados.</p>
+        <p class="mt-2">Hacemos envíos a todo el país. Tejido en Argentina.</p>
+    </footer>
+
+    <!-- Lógica de Productos y WhatsApp -->
+    <script>
+        // === CONFIGURACIÓN DE WHATSAPP ===
+        // REEMPLAZA ESTE NÚMERO POR EL DE TU NEGOCIO. 
+        // Formato internacional sin símbolos (+). Ej para Argentina: 5491123456789
+        const NUMERO_WHATSAPP = "5491100000000"; 
+
+        // === CATÁLOGO DE PRODUCTOS ===
+        const productos = [
+            {
+                id: 1,
+                nombre: "Poncho Pampa Tradicional",
+                precio: "$85.000",
+                descripcion: "Lana de oveja hilada a mano. Diseño clásico con guarda pampa en tonos rojizos. Pesado y muy abrigado.",
+                imagen: "https://images.unsplash.com/photo-1584988350125-9c8ebaf9cc2d?auto=format&fit=crop&w=600&q=80" // Imagen de muestra
+            },
+            {
+                id: 2,
+                nombre: "Ruana Norteña Tierra",
+                precio: "$62.000",
+                descripcion: "Mezcla de lana de llama y oveja. Colores naturales sin teñir (crudo y marrón). Caída liviana y suave.",
+                imagen: "https://images.unsplash.com/photo-1605001011155-25efb0193185?auto=format&fit=crop&w=600&q=80" // Imagen de muestra
+            },
+            {
+                id: 3,
+                nombre: "Poncho Corto Gris Perla",
+                precio: "$70.000",
+                descripcion: "100% lana merino fina. Ideal para media estación, súper suave al tacto y elegante.",
+                imagen: "https://images.unsplash.com/photo-1520986603414-998845fc6596?auto=format&fit=crop&w=600&q=80" // Imagen de muestra
+            }
+        ];
+
+        // Función para mostrar los productos en la página
+        function cargarProductos() {
+            const contenedor = document.getElementById('grid-productos');
+            
+            productos.forEach(prod => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl shadow-md overflow-hidden flex flex-col hover:shadow-xl transition-shadow duration-300";
+                
+                card.innerHTML = `
+                    <img src="${prod.imagen}" alt="${prod.nombre}" class="w-full h-64 object-cover">
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="font-serif text-xl font-bold text-stone-800 mb-2">${prod.nombre}</h3>
+                        <p class="text-stone-600 mb-4 flex-grow text-sm leading-relaxed">${prod.descripcion}</p>
+                        <div class="border-t border-stone-100 pt-4 mt-auto">
+                            <p class="text-2xl font-bold text-tierra-700 mb-4">${prod.precio}</p>
+                            <button onclick="enviarWhatsApp('comprar', '${prod.nombre}')" class="w-full bg-[#25D366] hover:bg-[#1DA851] text-white font-bold py-3 px-4 rounded-lg transition flex justify-center items-center gap-2">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                                Comprar
+                            </button>
+                        </div>
+                    </div>
+                `;
+                contenedor.appendChild(card);
+            });
+        }
+
+        // Función que arma el mensaje y abre WhatsApp
+        function enviarWhatsApp(tipoAccion, nombreProducto = '') {
+            let mensaje = '';
+
+            if (tipoAccion === 'comprar') {
+                mensaje = `¡Hola! Me encantó el producto "${nombreProducto}" que vi en su página web. ¿Sigue estando disponible para comprarlo?`;
+            } else if (tipoAccion === 'encargo') {
+                mensaje = `¡Hola! Quisiera consultar por un poncho hecho por encargo. ¿Me podrían pasar información sobre lanas, colores, medidas y tiempos de entrega?`;
+            }
+
+            // Codificar el texto para que la URL sea válida (reemplaza espacios por %20, etc.)
+            const textoCodificado = encodeURIComponent(mensaje);
+            
+            // Abre WhatsApp en una nueva pestaña
+            window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${textoCodificado}`, '_blank');
+        }
+
+        // Ejecutar la carga de productos cuando la página termine de leerse
+        document.addEventListener('DOMContentLoaded', cargarProductos);
+    </script>
+</body>
+</html>
