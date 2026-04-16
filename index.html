@@ -77,16 +77,74 @@
 
     <!-- Sección de Encargos Personalizados -->
     <section id="encargos" class="bg-stone-800 text-stone-50 py-20 px-4">
-        <div class="max-w-4xl mx-auto text-center">
+        <div class="max-w-4xl mx-auto">
             <h2 class="font-serif text-3xl md:text-4xl font-bold mb-6 text-tierra-300">¿Buscás algo único? Hacemos pedidos por encargo</h2>
-            <p class="text-lg md:text-xl text-stone-300 mb-10 max-w-2xl mx-auto font-light">
+            <p class="text-lg md:text-xl text-stone-300 mb-10 max-w-2xl font-light">
                 Si te gusta un modelo pero lo querés en otros colores, o si tenés un diseño en mente, podemos tejerlo especialmente para vos. Contactanos para elegir el hilado, los colores y las medidas.
             </p>
             
-            <button onclick="enviarWhatsApp('encargo')" class="inline-flex items-center gap-3 bg-white text-stone-900 px-8 py-4 rounded-full text-lg font-bold hover:bg-stone-200 transition shadow-xl">
-                <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                Consultar por WhatsApp
-            </button>
+            <form id="form-encargo" class="bg-white text-stone-800 rounded-2xl p-6 md:p-8 shadow-2xl space-y-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="encargo-color" class="block text-sm font-semibold mb-1">Color</label>
+                        <input id="encargo-color" name="color" type="text" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300">
+                    </div>
+                    <div>
+                        <label for="encargo-lana" class="block text-sm font-semibold mb-1">Tipo de lana</label>
+                        <input id="encargo-lana" name="lana" type="text" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="encargo-medidas" class="block text-sm font-semibold mb-1">Medidas</label>
+                        <input id="encargo-medidas" name="medidas" type="text" placeholder="Ej: 70 cm largo x 55 cm ancho" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300">
+                    </div>
+                    <div>
+                        <label for="encargo-prenda" class="block text-sm font-semibold mb-1">Tipo de prenda</label>
+                        <input id="encargo-prenda" name="tipoPrenda" type="text" placeholder="Poncho, ruana, chal, etc." required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="encargo-cuello" class="block text-sm font-semibold mb-1">¿Cuello?</label>
+                        <select id="encargo-cuello" name="cuello" required class="w-full border border-stone-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-tierra-300">
+                            <option value="Con cuello">Con cuello</option>
+                            <option value="Sin cuello">Sin cuello</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="encargo-flecos" class="block text-sm font-semibold mb-1">¿Flecos?</label>
+                        <select id="encargo-flecos" name="flecos" required class="w-full border border-stone-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-tierra-300">
+                            <option value="Con flecos">Con flecos</option>
+                            <option value="Sin flecos">Sin flecos</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="encargo-bordado" class="block text-sm font-semibold mb-1">¿Bordado?</label>
+                        <select id="encargo-bordado" name="bordado" required class="w-full border border-stone-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-tierra-300">
+                            <option value="Sin bordado">Sin bordado</option>
+                            <option value="Con bordado">Con bordado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="encargo-detalle-bordado" class="block text-sm font-semibold mb-1">Descripción del bordado (si aplica)</label>
+                    <input id="encargo-detalle-bordado" name="detalleBordado" type="text" placeholder="Ej: guarda andina en color vino" class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300">
+                </div>
+
+                <div>
+                    <label for="encargo-detalles" class="block text-sm font-semibold mb-1">Detalles adicionales</label>
+                    <textarea id="encargo-detalles" name="detallesAdicionales" rows="4" placeholder="Contanos cualquier otro detalle que te gustaría incluir." class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300"></textarea>
+                </div>
+
+                <button type="submit" class="inline-flex items-center justify-center gap-3 bg-[#25D366] text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-[#1DA851] transition shadow-xl w-full md:w-auto">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    Enviar encargo por WhatsApp
+                </button>
+            </form>
         </div>
     </section>
 
@@ -168,9 +226,46 @@
             // Abre WhatsApp en una nueva pestaña
             window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${textoCodificado}`, '_blank');
         }
+        function enviarEncargoPorWhatsApp(event) {
+            event.preventDefault();
+            const form = event.currentTarget;
+            const datos = new FormData(form);
+
+            const color = datos.get('color')?.toString().trim();
+            const lana = datos.get('lana')?.toString().trim();
+            const medidas = datos.get('medidas')?.toString().trim();
+            const tipoPrenda = datos.get('tipoPrenda')?.toString().trim();
+            const cuello = datos.get('cuello')?.toString().trim();
+            const flecos = datos.get('flecos')?.toString().trim();
+            const bordado = datos.get('bordado')?.toString().trim();
+            const detalleBordado = datos.get('detalleBordado')?.toString().trim();
+            const detallesAdicionales = datos.get('detallesAdicionales')?.toString().trim();
+
+            const descripcionBordado = bordado === 'Con bordado'
+                ? (detalleBordado || 'Sin detalle especificado')
+                : 'No aplica';
+
+            const mensaje = `¡Hola! Quiero encargar una prenda artesanal con estos datos:
+- Tipo de prenda: ${tipoPrenda}
+- Color: ${color}
+- Tipo de lana: ${lana}
+- Medidas: ${medidas}
+- Cuello: ${cuello}
+- Flecos: ${flecos}
+- Bordado: ${bordado}
+- Descripción del bordado: ${descripcionBordado}
+- Detalles adicionales: ${detallesAdicionales || 'Ninguno'}`;
+
+            const textoCodificado = encodeURIComponent(mensaje);
+            window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${textoCodificado}`, '_blank');
+        }
 
         // Ejecutar la carga de productos cuando la página termine de leerse
-        document.addEventListener('DOMContentLoaded', cargarProductos);
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarProductos();
+            document.getElementById('form-encargo').addEventListener('submit', enviarEncargoPorWhatsApp);
+        });
+
     </script>
 </body>
 </html>
