@@ -103,7 +103,7 @@
         const NUMERO_WHATSAPP = "5491100000000"; 
 
         // === CATÁLOGO DE PRODUCTOS ===
-        const productos = [
+        const PRODUCTOS_POR_DEFECTO = [
             {
                 id: 1,
                 nombre: "Poncho Pampa Tradicional",
@@ -127,9 +127,37 @@
             }
         ];
 
+        function obtenerProductos() {
+            const productosGuardados = localStorage.getItem('productosTienda');
+            if (!productosGuardados) {
+                return PRODUCTOS_POR_DEFECTO;
+            }
+
+            try {
+                const productosParseados = JSON.parse(productosGuardados);
+                if (Array.isArray(productosParseados)) {
+                    return productosParseados;
+                }
+                return PRODUCTOS_POR_DEFECTO;
+            } catch (error) {
+                return PRODUCTOS_POR_DEFECTO;
+            }
+        }
+
         // Función para mostrar los productos en la página
         function cargarProductos() {
             const contenedor = document.getElementById('grid-productos');
+            const productos = obtenerProductos();
+            contenedor.innerHTML = '';
+
+            if (!productos.length) {
+                contenedor.innerHTML = `
+                    <p class="col-span-full text-center text-stone-500 bg-white rounded-xl p-8 shadow-sm">
+                        No hay productos cargados por el momento.
+                    </p>
+                `;
+                return;
+            }
             
             productos.forEach(prod => {
                 const card = document.createElement('div');
