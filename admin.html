@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración | Telar y Raíz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Lora', 'serif'],
+                        sans: ['Nunito', 'sans-serif'],
+                    },
+                    colors: {
+                        tierra: {
+                            100: '#F5EBE6',
+                            300: '#D4B8A3',
+                            500: '#A67C52',
+                            700: '#734A26',
+                            900: '#402411',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-sans bg-stone-100 text-stone-800 min-h-screen">
+    <header class="bg-white shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-5 flex justify-between items-center">
+            <h1 class="font-serif text-2xl md:text-3xl font-bold text-tierra-700">Panel de Administración</h1>
+            <a href="index.html" class="bg-tierra-700 text-white px-4 py-2 rounded-lg hover:bg-tierra-900 transition">Volver a la tienda</a>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <section class="lg:col-span-1 bg-white rounded-xl shadow-md p-6 h-fit">
+            <h2 class="font-serif text-2xl font-bold mb-4">Cargar producto nuevo</h2>
+            <form id="form-producto" class="space-y-4">
+                <div>
+                    <label for="nombre" class="block text-sm font-semibold mb-1">Nombre</label>
+                    <input id="nombre" name="nombre" type="text" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300">
+                </div>
+                <div>
+                    <label for="precio" class="block text-sm font-semibold mb-1">Precio</label>
+                    <input id="precio" name="precio" type="text" placeholder="$85.000" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300">
+                </div>
+                <div>
+                    <label for="descripcion" class="block text-sm font-semibold mb-1">Descripción</label>
+                    <textarea id="descripcion" name="descripcion" rows="4" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300"></textarea>
+                </div>
+                <div>
+                    <label for="imagen" class="block text-sm font-semibold mb-1">URL de imagen</label>
+                    <input id="imagen" name="imagen" type="url" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300">
+                </div>
+                <button type="submit" class="w-full bg-tierra-700 text-white font-bold py-3 rounded-lg hover:bg-tierra-900 transition">
+                    Guardar producto
+                </button>
+            </form>
+            <p id="mensaje" class="text-sm mt-4"></p>
+        </section>
+
+        <section class="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
+            <h2 class="font-serif text-2xl font-bold mb-4">Productos cargados</h2>
+            <div id="lista-productos" class="space-y-4"></div>
+        </section>
+    </main>
+
+    <script>
+        const PRODUCTOS_POR_DEFECTO = [
+            {
+                id: 1,
+                nombre: "Poncho Pampa Tradicional",
+                precio: "$85.000",
+                descripcion: "Lana de oveja hilada a mano. Diseño clásico con guarda pampa en tonos rojizos. Pesado y muy abrigado.",
+                imagen: "Imagenes/Captura1.png"
+            },
+            {
+                id: 2,
+                nombre: "Ruana Norteña Tierra",
+                precio: "$62.000",
+                descripcion: "Mezcla de lana de llama y oveja. Colores naturales sin teñir (crudo y marrón). Caída liviana y suave.",
+                imagen: "https://images.unsplash.com/photo-1605001011155-25efb0193185?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 3,
+                nombre: "Poncho Corto Gris Perla",
+                precio: "$70.000",
+                descripcion: "100% lana merino fina. Ideal para media estación, súper suave al tacto y elegante.",
+                imagen: "https://images.unsplash.com/photo-1520986603414-998845fc6596?auto=format&fit=crop&w=600&q=80"
+            }
+        ];
+
+        function obtenerProductos() {
+            const guardados = localStorage.getItem('productosTienda');
+            if (!guardados) {
+                localStorage.setItem('productosTienda', JSON.stringify(PRODUCTOS_POR_DEFECTO));
+                return [...PRODUCTOS_POR_DEFECTO];
+            }
+
+            try {
+                const parseados = JSON.parse(guardados);
+                return Array.isArray(parseados) ? parseados : [...PRODUCTOS_POR_DEFECTO];
+            } catch (error) {
+                return [...PRODUCTOS_POR_DEFECTO];
+            }
+        }
+
+        function guardarProductos(productos) {
+            localStorage.setItem('productosTienda', JSON.stringify(productos));
+        }
+
+        function mostrarMensaje(texto, esError = false) {
+            const mensaje = document.getElementById('mensaje');
+            mensaje.textContent = texto;
+            mensaje.className = esError ? 'text-sm mt-4 text-red-600' : 'text-sm mt-4 text-green-700';
+        }
+
+        function renderizarLista() {
+            const lista = document.getElementById('lista-productos');
+            const productos = obtenerProductos();
+            lista.innerHTML = '';
+
+            if (!productos.length) {
+                lista.innerHTML = '<p class="text-stone-500">No hay productos cargados.</p>';
+                return;
+            }
+
+            productos.forEach((producto) => {
+                const item = document.createElement('article');
+                item.className = 'border border-stone-200 rounded-lg p-4 flex flex-col md:flex-row gap-4 md:items-start';
+                item.innerHTML = `
+                    <img src="${producto.imagen}" alt="${producto.nombre}" class="w-full md:w-32 h-32 object-cover rounded-md">
+                    <div class="flex-grow">
+                        <h3 class="font-serif text-xl font-bold text-stone-800">${producto.nombre}</h3>
+                        <p class="text-tierra-700 font-bold mt-1">${producto.precio}</p>
+                        <p class="text-sm text-stone-600 mt-2">${producto.descripcion}</p>
+                    </div>
+                    <button data-id="${producto.id}" class="eliminar bg-red-100 text-red-700 font-semibold px-4 py-2 rounded-lg hover:bg-red-200 transition h-fit">
+                        Eliminar
+                    </button>
+                `;
+                lista.appendChild(item);
+            });
+
+            document.querySelectorAll('.eliminar').forEach((btn) => {
+                btn.addEventListener('click', (event) => {
+                    const idAEliminar = Number(event.currentTarget.dataset.id);
+                    eliminarProducto(idAEliminar);
+                });
+            });
+        }
+
+        function agregarProducto(event) {
+            event.preventDefault();
+
+            const form = event.currentTarget;
+            const nuevoProducto = {
+                id: Date.now(),
+                nombre: form.nombre.value.trim(),
+                precio: form.precio.value.trim(),
+                descripcion: form.descripcion.value.trim(),
+                imagen: form.imagen.value.trim()
+            };
+
+            if (!nuevoProducto.nombre || !nuevoProducto.precio || !nuevoProducto.descripcion || !nuevoProducto.imagen) {
+                mostrarMensaje('Completá todos los campos antes de guardar.', true);
+                return;
+            }
+
+            const productos = obtenerProductos();
+            productos.push(nuevoProducto);
+            guardarProductos(productos);
+            form.reset();
+            renderizarLista();
+            mostrarMensaje('Producto agregado correctamente.');
+        }
+
+        function eliminarProducto(idProducto) {
+            const productos = obtenerProductos();
+            const actualizados = productos.filter(producto => producto.id !== idProducto);
+            guardarProductos(actualizados);
+            renderizarLista();
+            mostrarMensaje('Producto eliminado correctamente.');
+        }
+
+        document.getElementById('form-producto').addEventListener('submit', agregarProducto);
+        renderizarLista();
+    </script>
+</body>
+</html>
