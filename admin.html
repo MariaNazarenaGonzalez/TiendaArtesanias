@@ -54,8 +54,8 @@
                     <textarea id="descripcion" name="descripcion" rows="4" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300"></textarea>
                 </div>
                 <div>
-                    <label for="imagen" class="block text-sm font-semibold mb-1">URL de imagen</label>
-                    <input id="imagen" name="imagen" type="url" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300">
+                    <label for="imagen" class="block text-sm font-semibold mb-1">Imagen (.png/.jpg)</label>
+                    <input id="imagen" name="imagen" type="file" accept="image/png, image/jpeg, image/webp" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300">
                 </div>
                 <button type="submit" class="w-full bg-tierra-700 text-white font-bold py-3 rounded-lg hover:bg-tierra-900 transition">
                     Guardar producto
@@ -70,49 +70,8 @@
         </section>
     </main>
 
+    <script src="js/productos-db.js"></script>
     <script>
-        const PRODUCTOS_POR_DEFECTO = [
-            {
-                id: 1,
-                nombre: "Poncho Pampa Tradicional",
-                precio: "$85.000",
-                descripcion: "Lana de oveja hilada a mano. Diseño clásico con guarda pampa en tonos rojizos. Pesado y muy abrigado.",
-                imagen: "Imagenes/Captura1.png"
-            },
-            {
-                id: 2,
-                nombre: "Ruana Norteña Tierra",
-                precio: "$62.000",
-                descripcion: "Mezcla de lana de llama y oveja. Colores naturales sin teñir (crudo y marrón). Caída liviana y suave.",
-                imagen: "https://images.unsplash.com/photo-1605001011155-25efb0193185?auto=format&fit=crop&w=600&q=80"
-            },
-            {
-                id: 3,
-                nombre: "Poncho Corto Gris Perla",
-                precio: "$70.000",
-                descripcion: "100% lana merino fina. Ideal para media estación, súper suave al tacto y elegante.",
-                imagen: "https://images.unsplash.com/photo-1520986603414-998845fc6596?auto=format&fit=crop&w=600&q=80"
-            }
-        ];
-
-        function obtenerProductos() {
-            const guardados = localStorage.getItem('productosTienda');
-            if (!guardados) {
-                localStorage.setItem('productosTienda', JSON.stringify(PRODUCTOS_POR_DEFECTO));
-                return [...PRODUCTOS_POR_DEFECTO];
-            }
-
-            try {
-                const parseados = JSON.parse(guardados);
-                return Array.isArray(parseados) ? parseados : [...PRODUCTOS_POR_DEFECTO];
-            } catch (error) {
-                return [...PRODUCTOS_POR_DEFECTO];
-            }
-        }
-
-        function guardarProductos(productos) {
-            localStorage.setItem('productosTienda', JSON.stringify(productos));
-        }
 
         function mostrarMensaje(texto, esError = false) {
             const mensaje = document.getElementById('mensaje');
@@ -120,9 +79,9 @@
             mensaje.className = esError ? 'text-sm mt-4 text-red-600' : 'text-sm mt-4 text-green-700';
         }
 
-        function renderizarLista() {
+        async function renderizarLista() {
             const lista = document.getElementById('lista-productos');
-            const productos = obtenerProductos();
+            const productos = await window.ProductosDB.listarProductos();
             lista.innerHTML = '';
 
             if (!productos.length) {
@@ -155,37 +114,57 @@
             });
         }
 
-        function agregarProducto(event) {
-            event.preventDefault();
-
-            const form = event.currentTarget;
-            const nuevoProducto = {
-                id: Date.now(),
-                nombre: form.nombre.value.trim(),
-                precio: form.precio.value.trim(),
-                descripcion: form.descripcion.value.trim(),
-                imagen: form.imagen.value.trim()
-            };
-
-            if (!nuevoProducto.nombre || !nuevoProducto.precio || !nuevoProducto.descripcion || !nuevoProducto.imagen) {
-                mostrarMensaje('Completá todos los campos antes de guardar.', true);
-                return;
-            }
-
-            const productos = obtenerProductos();
-            productos.push(nuevoProducto);
-            guardarProductos(productos);
-            form.reset();
-            renderizarLista();
-            mostrarMensaje('Producto agregado correctamente.');
+        function leerArchivoComoDataURL(archivo) {
+            return new Promise((resolve, reject) => {
+                const lector = new FileReader();
+                lector.onload = () => resolve(lector.result);
+                lector.onerror = () => reject(new Error('No se pudo leer la imagen.'));
+                lector.readAsDataURL(archivo);
+            });
         }
 
-        function eliminarProducto(idProducto) {
-            const productos = obtenerProductos();
-            const actualizados = productos.filter(producto => producto.id !== idProducto);
-            guardarProductos(actualizados);
-            renderizarLista();
-            mostrarMensaje('Producto eliminado correctamente.');
+        async function agregarProducto(event) {
+            event.preventDefault();
+
+            try {
+                const form = event.currentTarget;
+                const archivoImagen = form.imagen.files[0];
+                if (!archivoImagen) {
+                    mostrarMensaje('Seleccioná una imagen para continuar.', true);
+                    return;
+                }
+
+                const imagenDataUrl = await leerArchivoComoDataURL(archivoImagen);
+
+                const nuevoProducto = {
+                    nombre: form.nombre.value.trim(),
+                    precio: form.precio.value.trim(),
+                    descripcion: form.descripcion.value.trim(),
+                    imagen: imagenDataUrl
+                };
+
+                if (!nuevoProducto.nombre || !nuevoProducto.precio || !nuevoProducto.descripcion || !nuevoProducto.imagen) {
+                    mostrarMensaje('Completá todos los campos antes de guardar.', true);
+                    return;
+                }
+
+                await window.ProductosDB.agregarProducto(nuevoProducto);
+                form.reset();
+                await renderizarLista();
+                mostrarMensaje('Producto agregado correctamente.');
+            } catch (error) {
+                mostrarMensaje('No se pudo guardar el producto. Probá nuevamente.', true);
+            }
+        }
+
+        async function eliminarProducto(idProducto) {
+            try {
+                await window.ProductosDB.eliminarProducto(idProducto);
+                await renderizarLista();
+                mostrarMensaje('Producto eliminado correctamente.');
+            } catch (error) {
+                mostrarMensaje('No se pudo eliminar el producto.', true);
+            }
         }
 
         document.getElementById('form-producto').addEventListener('submit', agregarProducto);
