@@ -95,7 +95,7 @@
         <p>&copy; 2026 Telar y Raíz. Todos los derechos reservados.</p>
         <p class="mt-2">Hacemos envíos a todo el país. Tejido en Argentina.</p>
     </footer>
-
+    <script src="js/productos-db.js"></script>
     <!-- Lógica de Productos y WhatsApp -->
     <script>
         // === CONFIGURACIÓN DE WHATSAPP ===
@@ -103,53 +103,22 @@
         // Formato internacional sin símbolos (+). Ej para Argentina: 5491123456789
         const NUMERO_WHATSAPP = "5491100000000"; 
 
-        // === CATÁLOGO DE PRODUCTOS ===
-        const PRODUCTOS_POR_DEFECTO = [
-            {
-                id: 1,
-                nombre: "Poncho Pampa Tradicional",
-                precio: "$85.000",
-                descripcion: "Lana de oveja hilada a mano. Diseño clásico con guarda pampa en tonos rojizos. Pesado y muy abrigado.",
-                imagen: "Imagenes/Captura1.png" // Imagen de muestra
-            },
-            {
-                id: 2,
-                nombre: "Ruana Norteña Tierra",
-                precio: "$62.000",
-                descripcion: "Mezcla de lana de llama y oveja. Colores naturales sin teñir (crudo y marrón). Caída liviana y suave.",
-                imagen: "https://images.unsplash.com/photo-1605001011155-25efb0193185?auto=format&fit=crop&w=600&q=80" // Imagen de muestra
-            },
-            {
-                id: 3,
-                nombre: "Poncho Corto Gris Perla",
-                precio: "$70.000",
-                descripcion: "100% lana merino fina. Ideal para media estación, súper suave al tacto y elegante.",
-                imagen: "https://images.unsplash.com/photo-1520986603414-998845fc6596?auto=format&fit=crop&w=600&q=80" // Imagen de muestra
-            }
-        ];
-
-        function obtenerProductos() {
-            const productosGuardados = localStorage.getItem('productosTienda');
-            if (!productosGuardados) {
-                return PRODUCTOS_POR_DEFECTO;
-            }
+        // Función para mostrar los productos en la página
+        async function cargarProductos() {
+            const contenedor = document.getElementById('grid-productos');
+            contenedor.innerHTML = '';
+            let productos = [];
 
             try {
-                const productosParseados = JSON.parse(productosGuardados);
-                if (Array.isArray(productosParseados)) {
-                    return productosParseados;
-                }
-                return PRODUCTOS_POR_DEFECTO;
+                productos = await window.ProductosDB.listarProductos();
             } catch (error) {
-                return PRODUCTOS_POR_DEFECTO;
+                contenedor.innerHTML = `
+                    <p class="col-span-full text-center text-red-600 bg-white rounded-xl p-8 shadow-sm">
+                        No se pudieron cargar los productos.
+                    </p>
+                `;
+                return;
             }
-        }
-
-        // Función para mostrar los productos en la página
-        function cargarProductos() {
-            const contenedor = document.getElementById('grid-productos');
-            const productos = obtenerProductos();
-            contenedor.innerHTML = '';
 
             if (!productos.length) {
                 contenedor.innerHTML = `
@@ -159,6 +128,7 @@
                 `;
                 return;
             }
+
             
             productos.forEach(prod => {
                 const card = document.createElement('div');
