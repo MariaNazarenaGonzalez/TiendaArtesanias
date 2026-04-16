@@ -37,41 +37,116 @@
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <section class="lg:col-span-1 bg-white rounded-xl shadow-md p-6 h-fit">
-            <h2 class="font-serif text-2xl font-bold mb-4">Cargar producto nuevo</h2>
-            <form id="form-producto" class="space-y-4">
+    <main class="max-w-6xl mx-auto px-4 py-10">
+        <section id="login-section" class="max-w-md mx-auto bg-white rounded-xl shadow-md p-6">
+            <h2 class="font-serif text-2xl font-bold mb-4">Ingreso de administración</h2>
+            <p class="text-sm text-stone-600 mb-4">Ingresá la contraseña para acceder al panel. Contraseña inicial: <span class="font-semibold">12345</span>.</p>
+            <form id="form-login" class="space-y-4">
                 <div>
-                    <label for="nombre" class="block text-sm font-semibold mb-1">Nombre</label>
-                    <input id="nombre" name="nombre" type="text" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300">
-                </div>
-                <div>
-                    <label for="precio" class="block text-sm font-semibold mb-1">Precio</label>
-                    <input id="precio" name="precio" type="text" placeholder="$85.000" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300">
-                </div>
-                <div>
-                    <label for="descripcion" class="block text-sm font-semibold mb-1">Descripción</label>
-                    <textarea id="descripcion" name="descripcion" rows="4" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300"></textarea>
-                </div>
+                   <label for="admin-password" class="block text-sm font-semibold mb-1">Contraseña</label>
+                    <input id="admin-password" name="adminPassword" type="password" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300">
                 <div>
                     <label for="imagen" class="block text-sm font-semibold mb-1">Imagen (.png/.jpg)</label>
                     <input id="imagen" name="imagen" type="file" accept="image/png, image/jpeg, image/webp" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300">
                 </div>
                 <button type="submit" class="w-full bg-tierra-700 text-white font-bold py-3 rounded-lg hover:bg-tierra-900 transition">
-                    Guardar producto
+                    Ingresar
                 </button>
             </form>
-            <p id="mensaje" class="text-sm mt-4"></p>
+            <p id="mensaje-login" class="text-sm mt-4"></p>
         </section>
+       <section id="admin-section" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <section class="lg:col-span-1 bg-white rounded-xl shadow-md p-6 h-fit">
+                <h2 class="font-serif text-2xl font-bold mb-4">Cargar producto nuevo</h2>
+                <form id="form-producto" class="space-y-4">
+                    <div>
+                        <label for="nombre" class="block text-sm font-semibold mb-1">Nombre</label>
+                        <input id="nombre" name="nombre" type="text" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300">
+                    </div>
+                    <div>
+                        <label for="precio" class="block text-sm font-semibold mb-1">Precio</label>
+                        <input id="precio" name="precio" type="text" placeholder="$85.000" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300">
+                    </div>
+                    <div>
+                        <label for="descripcion" class="block text-sm font-semibold mb-1">Descripción</label>
+                        <textarea id="descripcion" name="descripcion" rows="4" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300"></textarea>
+                    </div>
+                    <div>
+                        <label for="imagen" class="block text-sm font-semibold mb-1">Imagen (.png/.jpg)</label>
+                        <input id="imagen" name="imagen" type="file" accept="image/png, image/jpeg, image/webp" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300">
+                    </div>
+                    <button type="submit" class="w-full bg-tierra-700 text-white font-bold py-3 rounded-lg hover:bg-tierra-900 transition">
+                        Guardar producto
+                    </button>
+                </form>
+                <p id="mensaje" class="text-sm mt-4"></p>
+            </section>
 
-        <section class="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
-            <h2 class="font-serif text-2xl font-bold mb-4">Productos cargados</h2>
-            <div id="lista-productos" class="space-y-4"></div>
+            <section class="lg:col-span-2 space-y-8">
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="flex justify-between items-center gap-4 mb-4">
+                        <h2 class="font-serif text-2xl font-bold">Productos cargados</h2>
+                        <button id="btn-salir" class="bg-stone-200 text-stone-800 px-4 py-2 rounded-lg font-semibold hover:bg-stone-300 transition">Cerrar sesión</button>
+                    </div>
+                    <div id="lista-productos" class="space-y-4"></div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h2 class="font-serif text-2xl font-bold mb-4">Cambiar contraseña</h2>
+                    <form id="form-password" class="space-y-4">
+                        <div>
+                            <label for="password-actual" class="block text-sm font-semibold mb-1">Contraseña actual</label>
+                            <input id="password-actual" name="passwordActual" type="password" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300">
+                        </div>
+                        <div>
+                            <label for="password-nueva" class="block text-sm font-semibold mb-1">Nueva contraseña</label>
+                            <input id="password-nueva" name="passwordNueva" type="password" minlength="4" required class="w-full border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tierra-300">
+                        </div>
+                        <button type="submit" class="bg-tierra-700 text-white px-5 py-3 rounded-lg font-bold hover:bg-tierra-900 transition">Actualizar contraseña</button>
+                    </form>
+                    <p id="mensaje-password" class="text-sm mt-4"></p>
+                </div>
+            </section>
         </section>
     </main>
 
     <script src="js/productos-db.js"></script>
     <script>
+        const CLAVE_PASSWORD = 'adminPassword';
+        const CLAVE_SESION = 'adminActiva';
+        const PASSWORD_INICIAL = '12345';
+
+        function obtenerPasswordGuardada() {
+            return localStorage.getItem(CLAVE_PASSWORD) || PASSWORD_INICIAL;
+        }
+        function mostrarMensajeLogin(texto, esError = false) {
+            const mensaje = document.getElementById('mensaje-login');
+            mensaje.textContent = texto;
+            mensaje.className = esError ? 'text-sm mt-4 text-red-600' : 'text-sm mt-4 text-green-700';
+        }
+
+        function mostrarMensajePassword(texto, esError = false) {
+            const mensaje = document.getElementById('mensaje-password');
+            mensaje.textContent = texto;
+            mensaje.className = esError ? 'text-sm mt-4 text-red-600' : 'text-sm mt-4 text-green-700';
+        }
+
+        function actualizarVistaAutenticacion() {
+            const logueado = localStorage.getItem(CLAVE_SESION) === 'true';
+            const loginSection = document.getElementById('login-section');
+            const adminSection = document.getElementById('admin-section');
+
+            if (logueado) {
+                loginSection.classList.add('hidden');
+                adminSection.classList.remove('hidden');
+                renderizarLista();
+                return;
+            }
+
+            adminSection.classList.add('hidden');
+            loginSection.classList.remove('hidden');
+        }
+
 
         function mostrarMensaje(texto, esError = false) {
             const mensaje = document.getElementById('mensaje');
@@ -166,9 +241,57 @@
                 mostrarMensaje('No se pudo eliminar el producto.', true);
             }
         }
+        function iniciarSesion(event) {
+            event.preventDefault();
+            const form = event.currentTarget;
+            const passwordIngresada = form.adminPassword.value;
 
+            if (passwordIngresada !== obtenerPasswordGuardada()) {
+                mostrarMensajeLogin('Contraseña incorrecta.', true);
+                return;
+            }
+
+            localStorage.setItem(CLAVE_SESION, 'true');
+            form.reset();
+            mostrarMensajeLogin('Acceso concedido.');
+            actualizarVistaAutenticacion();
+        }
+
+        function cerrarSesion() {
+            localStorage.removeItem(CLAVE_SESION);
+            mostrarMensaje('');
+            mostrarMensajePassword('');
+            actualizarVistaAutenticacion();
+        }
+
+        function cambiarPassword(event) {
+            event.preventDefault();
+            const form = event.currentTarget;
+            const actual = form.passwordActual.value;
+            const nueva = form.passwordNueva.value.trim();
+
+            if (actual !== obtenerPasswordGuardada()) {
+                mostrarMensajePassword('La contraseña actual no coincide.', true);
+                return;
+            }
+
+            if (nueva.length < 4) {
+                mostrarMensajePassword('La nueva contraseña debe tener al menos 4 caracteres.', true);
+                return;
+            }
+
+            localStorage.setItem(CLAVE_PASSWORD, nueva);
+            form.reset();
+            mostrarMensajePassword('Contraseña actualizada correctamente.');
+        }
+
+        document.getElementById('form-login').addEventListener('submit', iniciarSesion);
         document.getElementById('form-producto').addEventListener('submit', agregarProducto);
-        renderizarLista();
+        document.getElementById('form-password').addEventListener('submit', cambiarPassword);
+        document.getElementById('btn-salir').addEventListener('click', cerrarSesion);
+
+        actualizarVistaAutenticacion();
+
     </script>
 </body>
 </html>
