@@ -1,7 +1,14 @@
 (function () {
-    const DB_NAME = 'tiendaArtesaniasDB';
-    const DB_VERSION = 1;
-    const STORE_NAME = 'productos';
+    const WHATSAPP_CONFIG = {
+        // Completá con tus datos de Meta/WhatsApp Cloud API
+        // Ejemplo: '123456789012345'
+        catalogId: '',
+        // Token permanente/sistema con permisos sobre el catálogo
+        accessToken: '',
+        // Opcional: usado para link directo a compra por WhatsApp
+        phoneNumber: '5491100000000'
+    };
+
 
     const PRODUCTOS_POR_DEFECTO = [
         {
@@ -9,91 +16,100 @@
             nombre: 'Poncho Pampa Tradicional',
             precio: '$85.000',
             descripcion: 'Lana de oveja hilada a mano. Diseño clásico con guarda pampa en tonos rojizos. Pesado y muy abrigado.',
-            imagen: 'Imagenes/Captura1.png'
+            imagen: 'Imagenes/Captura1.png',
+            linkCatalogo: ''
         },
         {
             id: 2,
             nombre: 'Ruana Norteña Tierra',
             precio: '$62.000',
             descripcion: 'Mezcla de lana de llama y oveja. Colores naturales sin teñir (crudo y marrón). Caída liviana y suave.',
-            imagen: 'https://images.unsplash.com/photo-1605001011155-25efb0193185?auto=format&fit=crop&w=600&q=80'
+            imagen: 'Imagenes/Captura2.png',
+            linkCatalogo: ''
         },
         {
             id: 3,
             nombre: 'Poncho Corto Gris Perla',
             precio: '$70.000',
             descripcion: '100% lana merino fina. Ideal para media estación, súper suave al tacto y elegante.',
-            imagen: 'https://images.unsplash.com/photo-1520986603414-998845fc6596?auto=format&fit=crop&w=600&q=80'
+            imagen: 'Imagenes/Captura3.png',
+            linkCatalogo: ''
         }
     ];
 
-    function abrirDB() {
-        return new Promise((resolve, reject) => {
-            const request = indexedDB.open(DB_NAME, DB_VERSION);
 
-            request.onupgradeneeded = (event) => {
-                const db = event.target.result;
-                if (!db.objectStoreNames.contains(STORE_NAME)) {
-                    db.createObjectStore(STORE_NAME, { keyPath: 'id' });
-                }
-            };
+    function formatearPrecio(precio, moneda) {
+        const valor = Number(precio || 0);
+        if (!Number.isFinite(valor) || valor <= 0) {
+            return 'Consultar precio';
+        }
 
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = () => reject(request.error);
-        });
+        const normalizado = valor >= 1000 ? valor / 100 : valor;
+        try {
+            return new Intl.NumberFormat('es-AR', {
+                style: 'currency',
+                currency: moneda || 'ARS',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(normalizado);
+        } catch {
+            return `$${normalizado}`;
+        }
     }
 
-    function ejecutarTransaccion(modo, operacion) {
-        return abrirDB().then((db) => new Promise((resolve, reject) => {
-            const tx = db.transaction(STORE_NAME, modo);
-            const store = tx.objectStore(STORE_NAME);
-            const request = operacion(store);
-
-            tx.oncomplete = () => resolve(request?.result);
-            tx.onerror = () => reject(tx.error);
-            tx.onabort = () => reject(tx.error);
-        }));
-    }
-
-    function contarProductos() {
-        return ejecutarTransaccion('readonly', (store) => store.count());
-    }
-
-    function agregarVarios(productos) {
-        return ejecutarTransaccion('readwrite', (store) => {
-            productos.forEach((producto) => store.put(producto));
-            return null;
-        });
-    }
-
-    function asegurarCatalogoInicial() {
-        return contarProductos().then((cantidad) => {
-            if (cantidad === 0) {
-                return agregarVarios(PRODUCTOS_POR_DEFECTO);
-            }
-            return null;
-        });
-    }
-
-    function listarProductos() {
-        return asegurarCatalogoInicial()
-            .then(() => ejecutarTransaccion('readonly', (store) => store.getAll()))
-            .then((productos) => productos.sort((a, b) => b.id - a.id));
-    }
-
-    function agregarProducto(producto) {
-        const productoConId = {
-            ...producto,
-            id: Date.now()
+    function mapearProductoWhatsApp(producto) {
+        return {
+            id: producto.id,
+            nombre: producto.name || 'Producto sin nombre',
+            precio: formatearPrecio(producto.price, producto.currency),
+            descripcion: producto.description || 'Sin descripción disponible.',
+            imagen: producto.image_url || 'Imagenes/Captura1.png',
+            linkCatalogo: producto.url || ''
         };
-
-        return ejecutarTransaccion('readwrite', (store) => store.put(productoConId))
-            .then(() => productoConId);
     }
 
-    function eliminarProducto(id) {
-        return ejecutarTransaccion('readwrite', (store) => store.delete(id))
-            .then(() => id);
+    async function listarProductosDesdeWhatsApp() {
+        if (!WHATSAPP_CONFIG.catalogId || !WHATSAPP_CONFIG.accessToken) {
+            throw new Error('Falta configurar catalogId/accessToken de WhatsApp.');
+        }
+
+        const endpoint = `https://graph.facebook.com/v23.0/${WHATSAPP_CONFIG.catalogId}/products?fields=id,name,description,price,currency,image_url,url`;
+
+        const respuesta = await fetch(endpoint, {
+            headers: {
+                Authorization: `Bearer ${WHATSAPP_CONFIG.accessToken}`
+            }
+        });
+
+        const payload = await respuesta.json().catch(() => ({}));
+        if (!respuesta.ok) {
+            const detalle = payload?.error?.message || 'No se pudo consultar el catálogo de WhatsApp.';
+            throw new Error(detalle);
+        }
+
+        const productos = Array.isArray(payload?.data) ? payload.data : [];
+        return productos.map(mapearProductoWhatsApp);
+    }
+
+    async function listarProductos() {
+        try {
+            const productos = await listarProductosDesdeWhatsApp();
+            if (productos.length > 0) {
+                return productos;
+            }
+        } catch (error) {
+            console.warn('No se pudo leer catálogo de WhatsApp, se usa catálogo local de respaldo.', error.message);
+        }
+
+        return PRODUCTOS_POR_DEFECTO;
+    }
+
+    async function agregarProducto() {
+        throw new Error('Alta deshabilitada: los productos se gestionan desde el catálogo de WhatsApp.');
+    }
+
+    async function eliminarProducto() {
+        throw new Error('Baja deshabilitada: los productos se gestionan desde el catálogo de WhatsApp.');
     }
 
     window.ProductosDB = {
@@ -102,3 +118,4 @@
         eliminarProducto
     };
 })();
+
