@@ -168,9 +168,7 @@
     <!-- Lógica de Productos y WhatsApp -->
     <script>
         // === CONFIGURACIÓN DE WHATSAPP ===
-        // REEMPLAZA ESTE NÚMERO POR EL DE TU NEGOCIO. 
-        // Formato internacional sin símbolos (+). Ej para Argentina: 5491123456789
-        const NUMERO_WHATSAPP = "5491100000000"; 
+        const NUMERO_WHATSAPP = "5492325592454"; 
 
         // Función para mostrar los productos en la página
         async function cargarProductos() {
@@ -232,9 +230,7 @@
 
             if (tipoAccion === 'comprar') {
                 mensaje = `¡Hola! Me encantó el producto "${nombreProducto}" que vi en su página web. ¿Sigue estando disponible para comprarlo?`;
-            } else if (tipoAccion === 'encargo') {
-                mensaje = `¡Hola! Quisiera consultar por un poncho hecho por encargo. ¿Me podrían pasar información sobre lanas, colores, medidas y tiempos de entrega?`;
-            }
+            } 
 
             // Codificar el texto para que la URL sea válida (reemplaza espacios por %20, etc.)
             const textoCodificado = encodeURIComponent(mensaje);
