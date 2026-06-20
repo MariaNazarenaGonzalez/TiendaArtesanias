@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogo | NGENECHEN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/cards.css">
+    <link rel="stylesheet" href="css/carrito.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="catalogo">
+    <header class="site-header">
+        <nav class="nav container" aria-label="Navegacion principal">
+            <a class="brand" href="index.html">NGENECHEN</a>
+            <div class="nav-links">
+                <a href="catalogo.html" aria-current="page">Catalogo</a>
+                <a href="contacto.html">Contacto</a>
+                <a class="cart-link" href="carrito.html">Carrito <span data-cart-count hidden>0</span></a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="page-main container">
+        <section class="page-title">
+            <p class="eyebrow">Catalogo</p>
+            <h1>Productos disponibles</h1>
+        </section>
+
+        <section class="toolbar" aria-label="Filtros del catalogo">
+            <label>
+                Buscar
+                <input type="search" data-search placeholder="Nombre, descripcion o categoria">
+            </label>
+            <label>
+                Categoria
+                <select data-category></select>
+            </label>
+            <label>
+                Orden
+                <select data-sort>
+                    <option value="nombre">Nombre</option>
+                    <option value="precioAsc">Menor precio</option>
+                    <option value="precioDesc">Mayor precio</option>
+                    <option value="stock">Stock</option>
+                </select>
+            </label>
+        </section>
+
+        <section class="products-grid" data-products-grid aria-live="polite"></section>
+        <nav class="pagination" data-pagination aria-label="Paginacion"></nav>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <p>NGENECHEN. Tejido artesanal en Argentina.</p>
+            <a href="contacto.html">Hacer una consulta</a>
+        </div>
+    </footer>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
