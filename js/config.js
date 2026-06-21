@@ -1,6 +1,6 @@
 export const CONFIG = {
     SHEET_ID: "1IkjsfSoToJTMG5e9TgMUSOBmNjWoX-024dnYCQWRa5o",
     SHEET_NAME: "Catalogo",
-    WHATSAPP_NUMBER: "542325564405",
+    WHATSAPP_NUMBER: "5492325564405",
     CURRENCY: "$"
 };
