@@ -51,6 +51,24 @@ export function normalizarStock(value) {
 }
 
 /**
+ * Converts a Google Drive "share" link (drive.google.com/open?id=... or
+ * .../file/d/ID/view) into a direct-image URL that works inside an
+ * <img> tag. Any other URL is returned unchanged.
+ * @param {unknown} value
+ * @returns {string}
+ */
+export function normalizarImagen(value) {
+    const texto = normalizarTexto(value);
+
+    if (!texto || !texto.includes("drive.google.com")) {
+        return texto;
+    }
+
+    const coincidencia = texto.match(/(?:[?&]id=|\/d\/)([a-zA-Z0-9_-]{10,})/);
+    return coincidencia ? `https://drive.google.com/thumbnail?id=${coincidencia[1]}&sz=w1000` : texto;
+}
+
+/**
  * Parses visibility values from a spreadsheet cell.
  * @param {unknown} value
  * @returns {boolean}
@@ -138,20 +156,45 @@ export function esProductoValido(producto) {
     );
 }
 
+function tokenizarClave(value) {
+    return normalizarTexto(value)
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") // quita tildes: "categoría" -> "categoria"
+        .split(/[^a-z0-9]+/)
+        .filter(Boolean);
+}
+
 /**
  * Reads one of several possible spreadsheet column names.
+ * Matches the full header first (e.g. "precio"), and falls back to
+ * matching a whole word inside a longer header (e.g. a Google Form
+ * question like "Precio (solo numeros)" still resolves to "precio").
  * @param {object} row
  * @param {string[]} keys
  * @returns {unknown}
  */
 export function leerCampo(row, keys) {
-    const normalizados = Object.entries(row).reduce((acc, [key, value]) => {
-        acc[normalizarTexto(key).toLowerCase()] = value;
-        return acc;
-    }, {});
+    const columnas = Object.keys(row).map((key) => ({
+        original: key,
+        tokens: tokenizarClave(key)
+    }));
 
-    const encontrado = keys.find((key) => key.toLowerCase() in normalizados);
-    return encontrado ? normalizados[encontrado.toLowerCase()] : "";
+    const candidatos = keys.map((key) => tokenizarClave(key).join(""));
+
+    const porTextoCompleto = candidatos
+        .map((candidato) => columnas.find((columna) => columna.tokens.join("") === candidato))
+        .find(Boolean);
+
+    if (porTextoCompleto) {
+        return row[porTextoCompleto.original];
+    }
+
+    const porPalabra = candidatos
+        .map((candidato) => columnas.find((columna) => columna.tokens.includes(candidato)))
+        .find(Boolean);
+
+    return porPalabra ? row[porPalabra.original] : "";
 }
 
 /**

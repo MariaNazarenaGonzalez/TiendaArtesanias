@@ -2,6 +2,7 @@ import { CONFIG } from "./config.js";
 import {
     esProductoValido,
     leerCampo,
+    normalizarImagen,
     normalizarPrecio,
     normalizarStock,
     normalizarTexto,
@@ -26,9 +27,9 @@ function transformarProducto(row, index) {
         descripcion: normalizarTexto(leerCampo(row, ["descripcion", "descripción", "description"])),
         categoria: normalizarTexto(leerCampo(row, ["categoria", "categoría", "category"])) || "General",
         precio: normalizarPrecio(leerCampo(row, ["precio", "price"])),
-        imagen: normalizarTexto(leerCampo(row, ["imagen", "image", "foto", "image_url"])),
+        imagen: normalizarImagen(leerCampo(row, ["imagen", "image", "foto", "image_url"])),
         stock: normalizarStock(leerCampo(row, ["stock", "cantidad", "quantity"])),
-        visible: normalizarVisible(leerCampo(row, ["visible", "activo", "publicado"]))
+        visible: normalizarVisible(leerCampo(row, ["visible", "activo", "publicado", "venta"]))
     };
 
     if (!esProductoValido(producto)) {
