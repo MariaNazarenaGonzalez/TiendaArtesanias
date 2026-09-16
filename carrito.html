@@ -32,9 +32,30 @@
 
         <section data-cart-container aria-live="polite"></section>
 
+        <form class="contact-form" id="checkout-form" data-checkout-form>
+            <p class="eyebrow">Datos para el pedido</p>
+            <label>
+                Nombre
+                <input type="text" name="nombre" autocomplete="name" required>
+            </label>
+            <label>
+                Direccion (opcional)
+                <input type="text" name="direccion" autocomplete="street-address">
+            </label>
+            <label>
+                Forma de pago (opcional)
+                <select name="formaPago">
+                    <option value="">Lo coordinamos por WhatsApp</option>
+                    <option value="Efectivo">Efectivo</option>
+                    <option value="Transferencia">Transferencia</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </label>
+        </form>
+
         <div class="cart-actions">
             <button class="button button-secondary" type="button" data-clear-cart>Vaciar carrito</button>
-            <button class="button button-primary" type="button" data-checkout>Finalizar por WhatsApp</button>
+            <button class="button button-primary" type="submit" form="checkout-form" data-checkout>Finalizar por WhatsApp</button>
         </div>
     </main>
 

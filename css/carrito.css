@@ -58,6 +58,10 @@
     font-size: 1.8rem;
 }
 
+#checkout-form {
+    margin-top: 22px;
+}
+
 .cart-actions {
     display: flex;
     flex-wrap: wrap;

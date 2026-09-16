@@ -15,15 +15,30 @@ function obtenerNumero() {
  * Creates a WhatsApp order message.
  * @param {object[]} items
  * @param {number} total
+ * @param {{nombre?: string, direccion?: string, formaPago?: string}} datosCliente
  * @returns {string}
  */
-export function crearMensajePedido(items, total) {
+export function crearMensajePedido(items, total, datosCliente = {}) {
+    const nombre = normalizarTexto(datosCliente.nombre);
+    const direccion = normalizarTexto(datosCliente.direccion);
+    const formaPago = normalizarTexto(datosCliente.formaPago);
+
     const lineas = items.flatMap((item) => [
         item.nombre,
         `Cantidad: ${item.cantidad}`,
         `Subtotal: ${formatearMoneda(item.precio * item.cantidad, CONFIG.CURRENCY)}`,
         ""
     ]);
+
+    const datosEntrega = [`Nombre: ${nombre}`];
+
+    if (direccion) {
+        datosEntrega.push(`Dirección: ${direccion}`);
+    }
+
+    if (formaPago) {
+        datosEntrega.push(`Forma de pago: ${formaPago}`);
+    }
 
     return [
         "Hola.",
@@ -37,11 +52,7 @@ export function crearMensajePedido(items, total) {
         "",
         `TOTAL: ${formatearMoneda(total, CONFIG.CURRENCY)}`,
         "",
-        "Nombre:",
-        "",
-        "Dirección:",
-        "",
-        "Forma de pago:"
+        ...datosEntrega
     ].join("\n");
 }
 

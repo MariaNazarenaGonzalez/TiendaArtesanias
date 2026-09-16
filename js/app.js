@@ -179,7 +179,6 @@ function renderizarCarrito() {
 
 function inicializarCarrito() {
     const container = document.querySelector("[data-cart-container]");
-    const checkout = document.querySelector("[data-checkout]");
     const clear = document.querySelector("[data-clear-cart]");
 
     renderizarCarrito();
@@ -227,7 +226,10 @@ function inicializarCarrito() {
         renderizarCarrito();
     });
 
-    checkout?.addEventListener("click", () => {
+    const checkoutForm = document.querySelector("[data-checkout-form]");
+
+    checkoutForm?.addEventListener("submit", (event) => {
+        event.preventDefault();
         const items = obtenerItemsCarrito();
 
         if (!items.length) {
@@ -235,7 +237,13 @@ function inicializarCarrito() {
             return;
         }
 
-        abrirWhatsApp(crearMensajePedido(items, calcularTotal()));
+        const data = new FormData(checkoutForm);
+
+        abrirWhatsApp(crearMensajePedido(items, calcularTotal(), {
+            nombre: data.get("nombre"),
+            direccion: data.get("direccion"),
+            formaPago: data.get("formaPago")
+        }));
     });
 }
 
