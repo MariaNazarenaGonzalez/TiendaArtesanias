@@ -72,6 +72,15 @@
         padding-block: 42px;
     }
 
+    .field-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .contact-mode-switch {
+        grid-template-columns: 1fr;
+    }
+
     .product-card__actions,
     .actions-row {
         display: grid;

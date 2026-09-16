@@ -32,17 +32,106 @@
                 <p>Contanos que pieza queres, medidas, colores y cualquier detalle importante. El mensaje se abre en WhatsApp para que puedas enviarlo desde tu cuenta.</p>
             </div>
 
-            <form class="contact-form" data-contact-form>
-                <label>
-                    Nombre
-                    <input type="text" name="nombre" autocomplete="name" required>
-                </label>
-                <label>
-                    Mensaje
-                    <textarea name="mensaje" rows="7" required placeholder="Ej: Quiero consultar por una ruana en tonos naturales."></textarea>
-                </label>
-                <button class="button button-primary" type="submit">Enviar consulta</button>
-            </form>
+            <div>
+                <div class="contact-mode-switch" role="radiogroup" aria-label="Tipo de consulta">
+                    <label class="mode-option">
+                        <input type="radio" name="modo-contacto" value="general" data-contact-mode checked>
+                        <span>Consulta general</span>
+                    </label>
+                    <label class="mode-option">
+                        <input type="radio" name="modo-contacto" value="encargo" data-contact-mode>
+                        <span>Encargo a medida</span>
+                    </label>
+                </div>
+
+                <form class="contact-form" data-contact-form-general>
+                    <label>
+                        Nombre
+                        <input type="text" name="nombre" autocomplete="name" required>
+                    </label>
+                    <label>
+                        Mensaje
+                        <textarea name="mensaje" rows="7" required placeholder="Ej: Quiero saber si hacen envios a otras provincias."></textarea>
+                    </label>
+                    <button class="button button-primary" type="submit">Enviar consulta</button>
+                </form>
+
+                <form class="contact-form" data-contact-form-encargo hidden>
+                    <label>
+                        Nombre
+                        <input type="text" name="nombre" autocomplete="name" required>
+                    </label>
+
+                    <label>
+                        Tipo de prenda
+                        <select name="prenda" required>
+                            <option value="" disabled selected>Elegi una opcion</option>
+                            <option value="Poncho">Poncho</option>
+                            <option value="Ruana">Ruana</option>
+                            <option value="Manta">Manta</option>
+                            <option value="Bufanda">Bufanda</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </label>
+
+                    <div class="field-grid">
+                        <label>
+                            Ancho (cm)
+                            <input type="number" name="ancho" min="1" inputmode="numeric" required>
+                        </label>
+                        <label>
+                            Largo (cm)
+                            <input type="number" name="largo" min="1" inputmode="numeric" required>
+                        </label>
+                    </div>
+
+                    <label>
+                        Tipo de lana
+                        <select name="lana" required>
+                            <option value="" disabled selected>Elegi una opcion</option>
+                            <option value="Oveja">Oveja</option>
+                            <option value="Llama">Llama</option>
+                            <option value="Industrial">Industrial</option>
+                            <option value="Otras">Otras</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Tipo de telar
+                        <select name="telar" required>
+                            <option value="" disabled selected>Elegi una opcion</option>
+                            <option value="4 cuadros">4 cuadros</option>
+                            <option value="6 cuadros">6 cuadros</option>
+                            <option value="8 cuadros">8 cuadros</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Colores
+                        <input type="text" name="colores" placeholder="Ej: bordo y beige" required>
+                    </label>
+
+                    <fieldset class="radio-group">
+                        <legend>Con o sin detalles</legend>
+                        <label class="radio-option">
+                            <input type="radio" name="detalles" value="Con detalles" checked>
+                            <span>Con detalles</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="detalles" value="Sin detalles">
+                            <span>Sin detalles</span>
+                        </label>
+                    </fieldset>
+
+                    <label>
+                        Descripcion libre (opcional)
+                        <textarea name="descripcion" rows="4" placeholder="Contanos cualquier otro detalle: flecos, guarda, ocasion, etc."></textarea>
+                    </label>
+
+                    <button class="button button-primary" type="submit">Enviar encargo</button>
+                </form>
+            </div>
         </section>
     </main>
 

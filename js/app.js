@@ -17,6 +17,7 @@ import { obtenerPaginaActual } from "./router.js";
 import { debounce, obtenerParametrosURL } from "./utilidades.js";
 import {
     actualizarContadorCarrito,
+    actualizarResumenCarrito,
     mostrarNotificacion,
     renderCarrito,
     renderCategorias,
@@ -31,6 +32,7 @@ import {
 import {
     abrirWhatsApp,
     crearMensajeConsulta,
+    crearMensajeEncargo,
     crearMensajePedido,
     crearMensajeProducto
 } from "./whatsapp.js";
@@ -189,8 +191,24 @@ function inicializarCarrito() {
             return;
         }
 
-        actualizarCantidad(input.dataset.cartQuantity, Number(input.value));
-        renderizarCarrito();
+        const id = input.dataset.cartQuantity;
+        const cantidadIngresada = Number(input.value);
+        const items = actualizarCantidad(id, cantidadIngresada);
+        const actualizado = items.find((item) => String(item.id) === String(id));
+
+        if (!actualizado) {
+            // La cantidad quedo en 0 y el item se elimino del carrito.
+            renderizarCarrito();
+            return;
+        }
+
+        if (actualizado.cantidad !== cantidadIngresada) {
+            // Se corrigio (por ejemplo, supero el stock disponible).
+            input.value = actualizado.cantidad;
+        }
+
+        actualizarResumenCarrito(items, calcularTotal());
+        actualizarCarritoHeader();
     });
 
     container?.addEventListener("click", (event) => {
@@ -222,16 +240,43 @@ function inicializarCarrito() {
 }
 
 function inicializarContacto() {
-    const form = document.querySelector("[data-contact-form]");
+    const modos = document.querySelectorAll("[data-contact-mode]");
+    const formGeneral = document.querySelector("[data-contact-form-general]");
+    const formEncargo = document.querySelector("[data-contact-form-encargo]");
 
-    form?.addEventListener("submit", (event) => {
+    function actualizarModoContacto() {
+        const seleccionado = document.querySelector("[data-contact-mode]:checked")?.value || "general";
+        formGeneral?.toggleAttribute("hidden", seleccionado !== "general");
+        formEncargo?.toggleAttribute("hidden", seleccionado !== "encargo");
+    }
+
+    modos.forEach((input) => input.addEventListener("change", actualizarModoContacto));
+
+    formGeneral?.addEventListener("submit", (event) => {
         event.preventDefault();
-        const data = new FormData(form);
+        const data = new FormData(formGeneral);
         const nombre = data.get("nombre")?.toString().trim();
         const mensaje = data.get("mensaje")?.toString().trim();
         const asunto = nombre ? `Soy ${nombre}. ${mensaje}` : mensaje;
 
         abrirWhatsApp(crearMensajeConsulta(asunto));
+    });
+
+    formEncargo?.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const data = new FormData(formEncargo);
+
+        abrirWhatsApp(crearMensajeEncargo({
+            nombre: data.get("nombre"),
+            prenda: data.get("prenda"),
+            ancho: data.get("ancho"),
+            largo: data.get("largo"),
+            lana: data.get("lana"),
+            telar: data.get("telar"),
+            colores: data.get("colores"),
+            detalles: data.get("detalles"),
+            descripcion: data.get("descripcion")
+        }));
     });
 }
 

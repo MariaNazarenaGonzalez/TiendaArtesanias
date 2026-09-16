@@ -64,6 +64,43 @@ export function crearMensajeProducto(producto) {
 }
 
 /**
+ * Creates a WhatsApp message for a custom order (encargo), with every
+ * detail the artisan needs already resolved to speed up the reply.
+ * @param {{nombre?: string, prenda?: string, ancho?: string|number, largo?: string|number, lana?: string, telar?: string, colores?: string, detalles?: string, descripcion?: string}} datos
+ * @returns {string}
+ */
+export function crearMensajeEncargo(datos) {
+    const nombre = normalizarTexto(datos.nombre);
+    const prenda = normalizarTexto(datos.prenda);
+    const ancho = normalizarTexto(datos.ancho);
+    const largo = normalizarTexto(datos.largo);
+    const lana = normalizarTexto(datos.lana);
+    const telar = normalizarTexto(datos.telar);
+    const colores = normalizarTexto(datos.colores);
+    const detalles = normalizarTexto(datos.detalles);
+    const descripcion = normalizarTexto(datos.descripcion);
+
+    const lineas = [
+        "Hola. Quiero hacer un encargo a medida.",
+        "",
+        `Tipo de prenda: ${prenda}`,
+        `Medidas: ${ancho} cm de ancho x ${largo} cm de largo`,
+        `Tipo de lana: ${lana}`,
+        `Tipo de telar: ${telar}`,
+        `Colores: ${colores}`,
+        `Detalles: ${detalles}`
+    ];
+
+    if (descripcion) {
+        lineas.push(`Descripcion: ${descripcion}`);
+    }
+
+    lineas.push("", `Nombre: ${nombre}`);
+
+    return lineas.join("\n");
+}
+
+/**
  * Generates a wa.me URL.
  * @param {string} mensaje
  * @returns {string}

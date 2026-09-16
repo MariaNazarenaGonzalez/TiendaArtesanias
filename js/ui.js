@@ -193,9 +193,33 @@ export function renderCarrito(container, items, total) {
         </div>
         <aside class="cart-summary">
             <span>Total</span>
-            <strong>${formatearMoneda(total, CONFIG.CURRENCY)}</strong>
+            <strong data-cart-total>${formatearMoneda(total, CONFIG.CURRENCY)}</strong>
         </aside>
     `;
+}
+
+/**
+ * Updates only the per-item subtotal and the grand total, without
+ * rebuilding the cart markup. Keeps focus/cursor in the quantity
+ * input while the person is typing.
+ * @param {object[]} items
+ * @param {number} total
+ * @returns {void}
+ */
+export function actualizarResumenCarrito(items, total) {
+    items.forEach((item) => {
+        const subtotal = document.querySelector(`[data-cart-subtotal="${CSS.escape(String(item.id))}"]`);
+
+        if (subtotal) {
+            subtotal.textContent = formatearMoneda(item.precio * item.cantidad, CONFIG.CURRENCY);
+        }
+    });
+
+    const totalElement = document.querySelector("[data-cart-total]");
+
+    if (totalElement) {
+        totalElement.textContent = formatearMoneda(total, CONFIG.CURRENCY);
+    }
 }
 
 /**
@@ -243,7 +267,7 @@ function renderCarritoItem(item) {
                 Cantidad
                 <input type="number" min="1" max="${item.stock}" value="${item.cantidad}" data-cart-quantity="${escaparHTML(item.id)}">
             </label>
-            <strong>${formatearMoneda(item.precio * item.cantidad, CONFIG.CURRENCY)}</strong>
+            <strong data-cart-subtotal="${escaparHTML(item.id)}">${formatearMoneda(item.precio * item.cantidad, CONFIG.CURRENCY)}</strong>
             <button class="button button-ghost" type="button" data-remove-from-cart="${escaparHTML(item.id)}">Eliminar</button>
         </article>
     `;
